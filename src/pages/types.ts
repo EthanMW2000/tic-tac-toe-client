@@ -1,14 +1,14 @@
-interface Marker {
-    isCircle: boolean 
+export interface ISlot {
+    row: number,
+    col: number
+    assignment?: Player,
 }
 
-interface Slot {
-    position: number,
-    assignment?: Marker,
-}
-
-interface Board {
-    setup: Slot[]
+export interface IBoard {
     rowsColumns: number
 }
 
+export enum Player {
+    Circle,
+    Cross
+}
