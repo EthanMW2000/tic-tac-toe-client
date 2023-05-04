@@ -1,13 +1,19 @@
 import { useState } from "react";
 import { IBoard, ISlot, Player } from "../types";
 import Slot from "./slot";
+import { checkWin } from "@/calculations";
 
 export default function Board(props: IBoard) {
   const [player, setPlayer] = useState<Player>(Player.Circle);
   const [playedSlots, setPlayedSlots] = useState<ISlot[]>([]);
+  const [movesMade, setMovesMade] = useState<number>(0);
 
-  function updatePlayer(newPlayer: Player) {
+  async function updatePlayer(newPlayer: Player) {
     setPlayer(newPlayer);
+    setMovesMade(movesMade + 1)
+    if(movesMade == props.rowsColumns) {
+      const winner = await checkWin(playedSlots, props.rowsColumns)
+    }
   }
 
   function SetupBoard() {

@@ -1,8 +1,10 @@
-export function findAdjacency(
+import { ISlot, Player } from "./types";
+
+export async function findAdjacency(
   row: number,
   col: number,
   rowsColumns: number
-): number[] {
+): Promise<number[]> {
   let adjacencyArr: number[] = [];
   // find adjacency for slot in top row
   switch (row) {
@@ -88,4 +90,12 @@ export function findAdjacency(
   }
 
   return adjacencyArr;
+}
+
+export async function checkWin(
+  slots: ISlot[],
+  spotsNeeded: number
+): Promise<Player | undefined> {
+  
+  return undefined;
 }

@@ -33,8 +33,8 @@ export default function Slot(props: slotProps) {
     setIsPlayed(true);
   }
 
-  function setAdjacencies() {
-    setAdjaceny(findAdjacency(props.row, props.col, props.rowsColumns))
+  async function setAdjacencies() {
+    setAdjaceny(await findAdjacency(props.row, props.col, props.rowsColumns))
   }
 
   useEffect(() => {
