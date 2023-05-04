@@ -1,14 +1,17 @@
 export interface ISlot {
-    row: number,
-    col: number
-    assignment?: Player,
+  id: number;
+  player: Player;
+  isPlayed: boolean;
+  row: number;
+  col: number;
+  adjacency?: number[];
 }
 
 export interface IBoard {
-    rowsColumns: number
+  rowsColumns: number;
 }
 
 export enum Player {
-    Circle,
-    Cross
+  Circle,
+  Cross,
 }
