@@ -6,6 +6,7 @@ interface markProps {
   updatePlayer(data: Player): void;
   isPlayed: boolean;
   setPlayer(data: Player): void;
+  handlePlay(data: Player): void;
 }
 
 export default function Mark(props: markProps) {
@@ -15,11 +16,13 @@ export default function Mark(props: markProps) {
     if (props.assignment === Player.Circle) {
       setMarker(Player.Circle);
       props.setPlayer(Player.Circle);
+      props.handlePlay(Player.Circle);
       props.updatePlayer(Player.Cross);
     } else {
       setMarker(Player.Cross);
       props.setPlayer(Player.Cross);
-      props.updatePlayer(Player.Circle);
+      props.handlePlay(Player.Cross);
+      props.updatePlayer(Player.Circle); 
     }
   }
 

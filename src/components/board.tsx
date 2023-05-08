@@ -4,16 +4,27 @@ import Slot from "./slot";
 import { checkWin } from "@/calculations";
 
 export default function Board(props: IBoard) {
-  const [player, setPlayer] = useState<Player>(Player.Circle);
-  const [playedSlots, setPlayedSlots] = useState<ISlot[]>([]);
+  const [player, setPlayer] = useState<Player>(Player.Cross);
+  const [slots, setSlots] = useState<ISlot[]>([]);
   const [movesMade, setMovesMade] = useState<number>(0);
 
   async function updatePlayer(newPlayer: Player) {
     setPlayer(newPlayer);
-    setMovesMade(movesMade + 1)
-    if(movesMade == props.rowsColumns) {
-      const winner = await checkWin(playedSlots, props.rowsColumns)
-    }
+    const moves = movesMade + 1;
+    setMovesMade(movesMade + 1);
+    if (moves < props.rowsColumns) return;
+    const winner = await checkWin(slots, props.rowsColumns);
+
+    if (
+      winner == undefined &&
+      movesMade == props.rowsColumns * props.rowsColumns
+    ) {
+      console.log("its a tie!");
+    } else if (winner == Player.Circle) {
+      console.log("Circle has won!");
+    } else if (winner == Player.Cross) {
+      console.log("Cross has won!");
+    } else return;
   }
 
   function SetupBoard() {
@@ -39,8 +50,8 @@ export default function Board(props: IBoard) {
                 id={slot + row * props.rowsColumns}
                 key={slot + row * props.rowsColumns}
                 updatePlayer={updatePlayer}
-                setPlayedSlots={setPlayedSlots}
-                playedSlots={playedSlots}
+                setSlots={setSlots}
+                slots={slots}
                 rowsColumns={props.rowsColumns}
                 row={row}
                 col={slot}

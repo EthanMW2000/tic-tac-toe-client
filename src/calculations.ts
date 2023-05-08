@@ -96,6 +96,28 @@ export async function checkWin(
   slots: ISlot[],
   spotsNeeded: number
 ): Promise<Player | undefined> {
-  
+  interface IVisted {
+    [key: number]: boolean;
+  }
+  const visited: IVisted = {};
+  const start = slots.find((slot) => {
+    visited[slot.id] = true;
+    if (slot.isPlayed == true) {
+      return slot;
+    }
+  });
+  if (!start) return undefined;
+  const stack = [start];
+  let currSlot: ISlot;
+  while (stack.length) {
+    currSlot = stack.shift() as ISlot;
+    currSlot.adjacency?.forEach(adj => {
+      if(!visited[adj]) {
+        visited[adj] = true
+        stack.push(slots.find(slot => slot.id = adj) as ISlot)
+      }
+    })
+  }
+
   return undefined;
 }
