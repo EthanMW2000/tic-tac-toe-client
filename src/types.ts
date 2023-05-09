@@ -1,6 +1,6 @@
 export interface ISlot {
   id: number;
-  player: Player;
+  player?: Player;
   isPlayed: boolean;
   row: number;
   col: number;
@@ -9,9 +9,15 @@ export interface ISlot {
 
 export interface IBoard {
   rowsColumns: number;
+  movesMade: number
+  setMovesMade(data: number): void 
 }
 
 export enum Player {
   Circle,
   Cross,
+}
+
+export interface IVisited {
+  [key: number]: boolean;
 }

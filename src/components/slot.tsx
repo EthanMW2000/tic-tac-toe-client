@@ -5,7 +5,7 @@ import { findAdjacency } from "@/calculations";
 
 interface slotProps {
   id: number;
-  updatePlayer(data: Player): void;
+  updatePlayer(data: Player, newSlots: ISlot[]): void;
   setSlots(data: ISlot[]): void;
   slots: ISlot[];
   assignment: Player;
@@ -21,14 +21,18 @@ export default function Slot(props: slotProps) {
   const [slot, setSlot] = useState<ISlot>();
   const idString = props.id.toString();
 
-  function handlePlay(setting: Player) {
+  function handlePlay(setting: Player, newPlayer: Player) {
     setIsPlayed(true);
     const updateSlots = props.slots.map((s) => {
       if (s.id == props.id) {
-        (s.isPlayed = true), (s.player = setting);
+        (s.isPlayed = true),
+          (s.player = setting),
+          (s.col = props.col),
+          (s.row = props.row);
       }
       return s;
     });
+    props.updatePlayer(newPlayer, updateSlots);
   }
 
   useEffect(() => {
@@ -39,20 +43,30 @@ export default function Slot(props: slotProps) {
         props.rowsColumns
       );
       setAdjaceny(adjacencyArr);
-      const slotInfo = {
-        id: props.id,
-        player: player as Player,
-        isPlayed: isPlayed,
-        row: props.row,
-        col: props.col,
-        adjacency: adjacencyArr,
-      };
-      setSlot(slotInfo);
-      const updateSlots = props.slots;
-      const existingSlot = updateSlots.find((s) => s.id == slotInfo.id);
-      if (existingSlot != undefined) return;
-      updateSlots.push(slotInfo);
-      props.setSlots(updateSlots);
+      if (props.slots.find(s => s.id == props.id)) {
+        const updateSlots = props.slots.map((s) => {
+          if (s.id == props.id) {
+            (s.player = player),
+              (s.isPlayed = isPlayed),
+              (s.col = props.col),
+              (s.row = props.row),
+              (s.adjacency = adjacencyArr);
+          }
+          return s;
+        });
+        props.setSlots(updateSlots);
+      } else {
+        const updateSlots = props.slots
+        updateSlots.push({
+          id: props.id,
+          player: undefined,
+          isPlayed: isPlayed,
+          col: props.col,
+          row: props.row,
+          adjacency: adjacencyArr,
+        });
+        props.setSlots(updateSlots)
+      }
     }
     calculateAdjacencies();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,7 +80,6 @@ export default function Slot(props: slotProps) {
       <div className="flex justify-center items-center w-full h-full">
         <Mark
           assignment={props.assignment}
-          updatePlayer={props.updatePlayer}
           isPlayed={isPlayed}
           setPlayer={setPlayer}
           handlePlay={handlePlay}
